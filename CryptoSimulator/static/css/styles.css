@@ -1,0 +1,123 @@
+:root {
+    --bg-color: rgb(248, 248, 248);
+    --primary-color: rgba(5, 60, 94, 1);
+    --secondary-color: rgba(62, 146, 204, 1);
+    --tertiary-color: rgba(241, 143, 1, 1);
+    --important-color: rgba(137, 4, 61, 1);
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Montserrat', sans-serif;
+    height: 100%;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    height: 50px;
+    font-size: large;
+    line-height: 50px;
+    padding-left: 25px;
+}
+
+nav {
+    background-color: var(--tertiary-color);
+    color: var(--bg-color);
+    height: 4rem;
+    line-height: 4rem;
+    padding: 0 25px;
+    /* que se vaya el color del enlance */
+    text-decoration: none;
+    font-size: 1.2rem;
+
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    margin-left: 3rem;
+}
+
+html {
+    height: 100%;
+
+}
+
+h1, .titulo_entrada {
+    font-size: 40px;
+    text-align: center;
+    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    padding-top: 3rem;
+}
+
+main {
+    max-width: 90vw;
+    margin: auto;
+    padding: 20px;
+}
+
+/* estilos de la tabla de la pagina de index */
+table {
+    width: 70%;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    border-collapse: collapse;
+    font-size: 1.2rem;
+    
+}
+
+.titulo-tabla {
+    border-bottom: solid thin #19a187;
+    text-align: left;
+}
+
+.titulo-tabla-acciones {
+    border-bottom: solid thin #19a187;
+    text-align: right;
+}
+th {
+    padding: 10px;
+    text-align: left;
+    border-bottom: solid thin var(--primary-color);
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    
+}
+
+tr:last-child td {
+    border-bottom: 1px solid var(--primary-color);
+    /* Agrega un borde inferior de 1 píxel a la última fila de celdas */
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+tr.cabeceras:hover {
+    background-color: transparent;
+}
+
+td {
+    border-top: 1px solid var(--primary-color);
+    /* Agrega un borde superior de 1 píxel a cada celda */
+}
+
+.tabla-con-sombra {
+    border-collapse: collapse;
+    width: 70%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.tabla-con-sombra th,
+.tabla-con-sombra td {
+    text-align: left;
+    padding: 8px;
+}
+
+
+
+
+
+/* fin de estilos de la tabla de la pagina de index */
