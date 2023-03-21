@@ -71,12 +71,12 @@ table {
 }
 
 .titulo-tabla {
-    border-bottom: solid thin #19a187;
+    border-bottom: solid thin var(--primary-color);
     text-align: left;
 }
 
 .titulo-tabla-acciones {
-    border-bottom: solid thin #19a187;
+    border-bottom: solid thin var(--primary-color);
     text-align: right;
 }
 th {
@@ -162,3 +162,19 @@ td {
 }
 
 /* fin estilos de paginación */
+
+/****** footer ******/
+
+footer, .pie_pagina {
+    background-color: var(--primary-color);
+    font-size: 1rem;
+    color: white;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 25px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    
+}
