@@ -1,7 +1,6 @@
 from . import app
-from flask import jsonify
-from flask import render_template
-# from config import DEFAULT_PAG, PAG_SIZE
+from flask import jsonify, request, render_template
+from config import DEFAULT_PAG, PAG_SIZE
 from .models import DBManager
 
 
@@ -18,13 +17,20 @@ def listar_transacciones():
     try:
         db = DBManager(RUTA)
         sql = 'SELECT * FROM transactions'
-        transacciones = db.consultaSQL(sql)
+        page = int(request.args.get('p', DEFAULT_PAG)) # devuelve el valor de la página que se pide, si no se pide ninguna devuelve la página por defecto
+        nreg = int(request.args.get('r', PAG_SIZE))
+        transacciones, num_pages = db.consultaSQL(sql, page, nreg) 
+        
         if len(transacciones) > 0:
             resultado = {
                 "status": "success",
-                "results": transacciones
+                "results": transacciones, 
+                "page" : page,
+                "num_pages": num_pages
             }
+           
             status_code = 200
+        
         else:
             resultado = {
                 'status': 'error',

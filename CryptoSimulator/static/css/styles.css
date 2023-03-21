@@ -26,10 +26,11 @@ nav {
     color: var(--bg-color);
     height: 4rem;
     line-height: 4rem;
-    padding: 0 25px;
-    /* que se vaya el color del enlance */
+    padding: 0 50px;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    text-align: right;
+    font-weight: 500;
 
 }
 
@@ -58,7 +59,7 @@ main {
     padding: 20px;
 }
 
-/* estilos de la tabla de la pagina de index */
+/******** estilos de la tabla de la pagina de index ***********/
 table {
     width: 70%;
     margin: auto;
@@ -116,8 +117,43 @@ td {
     padding: 8px;
 }
 
-
-
-
-
 /* fin de estilos de la tabla de la pagina de index */
+
+
+
+/************ estilos de paginación *************/
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #333;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-link.current {
+    font-weight: bold;
+    border-color: var(--tertiary-color);
+    color: var(--tertiary-color);
+}
+
+.pagination-link.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.pagination-link:hover:not(.current) {
+    background-color: #eee;
+}
+
+/* fin estilos de paginación */

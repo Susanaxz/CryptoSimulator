@@ -1,11 +1,11 @@
 const peticion = new XMLHttpRequest();
 console.log("Empiezo a ejecutar JS");
 
-function cargarTransacciones() {
+function cargarTransacciones(page) {
     console.log("Has llamado a la función cargarTransacciones()");
     // aquí irá el spinner
 
-    let queryParams = getQueryParams();
+    let queryParams = getQueryParams(page);
 
     let url = "http://127.0.0.1:5000/api/v1/transacciones";
 
@@ -18,14 +18,17 @@ function cargarTransacciones() {
     peticion.send();
 
     console.log("FIN de la función cargarTransacciones()");
+
 }
 
-function getQueryParams() {
+function getQueryParams(page) {
   const params = new URLSearchParams(window.location.search);
 
   let queryParams = "";
 
-  if (params.has("p") && params.get("p")) {
+  if (page) {
+    queryParams = `p=${page}`;
+  } else if (params.has("p") && params.get("p")) {
     queryParams = `p=${params.get("p")}`;
   }
 
@@ -40,6 +43,51 @@ function getQueryParams() {
   return queryParams;
 }
 
+function actualizarPaginacion(page, num_pages) {
+  const pagination = document.querySelector(".pagination");
+
+  let html = "";
+  const maxVisiblePages = 3;
+  let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(num_pages, startPage + maxVisiblePages - 1);
+
+  if (page > 1) {
+    html += `<a class="pagination-link" data-page="${
+      page - 1
+    }" href="#">&lt;</a>`;
+  } else {
+    html += `<span class="pagination-link disabled">&lt;</span>`;
+  }
+
+  for (let p = startPage; p <= endPage; p++) {
+    if (p === page) {
+      html += `<span class="pagination-link current">${p}</span>`;
+    } else {
+      html += `<a class="pagination-link" data-page="${p}" href="#">${p}</a>`;
+    }
+  }
+
+  if (page < num_pages) {
+    html += `<a class="pagination-link" data-page="${
+      page + 1
+    }" href="#">&gt;</a>`;
+  } else {
+    html += `<span class="pagination-link disabled">&gt;</span>`;
+  }
+
+  pagination.innerHTML = html;
+
+  // Agrega event listeners a los nuevos enlaces de paginación
+  const links = pagination.querySelectorAll(".pagination-link");
+  links.forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      const page = parseInt(this.dataset.page);
+      cargarTransacciones(page);
+    });
+  });
+}
+    
 
 function mostrarTransacciones() {
     console.log("Has llamado a la función mostrarTransacciones", this);
@@ -48,6 +96,12 @@ function mostrarTransacciones() {
         console.log("La petición ha sido correcta");
         const response = JSON.parse(peticion.responseText);
         const transacciones = response.results;
+        console.log(response);
+        const page = response.page;
+        const num_pages = response.num_pages;
+        const pagination = document.querySelector(".pagination");
+        pagination.innerHTML = "";
+        
 
         let html = "";
         for (let i = 0; i < transacciones.length; i++) {
@@ -65,13 +119,15 @@ function mostrarTransacciones() {
             <td>${trans.to_currency}</td>
             <td>${trans.to_quantity}</td>
             <td>${trans.rate}</td>
-
-            <td>
+            </tr>
             `;
         }   
 
         const tabla = document.querySelector("#tabla-transacciones");
         tabla.innerHTML = html;
+
+        actualizarPaginacion(page, num_pages);
+
     } else {
         console.log("La petición ha fallado");
         alert("error al cargar las transacciones")
@@ -80,12 +136,12 @@ function mostrarTransacciones() {
 }
 
 
-
-
-window.onload = function () {
+window.onload = function () { 
     console.log("funcion onload");
     // aquí irá el spinner
 
     cargarTransacciones();
     peticion.onload = mostrarTransacciones;
+    
 };
+
