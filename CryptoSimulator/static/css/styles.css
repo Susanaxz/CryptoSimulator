@@ -14,18 +14,24 @@ body {
 
 header {
     background-color: var(--primary-color);
-    color: white;
-    height: 50px;
     font-size: large;
-    line-height: 50px;
-    padding-left: 25px;
+    color: white;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 35px;
+}
+
+img, .logo {
+    height: 35px;
+    width: 35px;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    margin-right: 0.5rem;
 }
 
 nav {
-    background-color: var(--tertiary-color);
-    color: var(--bg-color);
-    height: 4rem;
-    line-height: 4rem;
+    line-height: 3rem;
     padding: 0 50px;
     text-decoration: none;
     font-size: 1rem;
@@ -34,10 +40,15 @@ nav {
 
 }
 
+
 a {
-    color: white;
+    color: var(--primary-color);
     text-decoration: none;
     margin-left: 3rem;
+}
+
+a:hover {
+    color: var(--tertiary-color);
 }
 
 html {
@@ -50,8 +61,9 @@ h1, .titulo_entrada {
     text-align: center;
     font-weight: 800;
     font-family: 'Montserrat', sans-serif;
-    padding-top: 3rem;
+
 }
+
 
 main {
     max-width: 90vw;
@@ -163,18 +175,23 @@ td {
 
 /* fin estilos de paginación */
 
+
+
 /****** footer ******/
 
 footer, .pie_pagina {
-    background-color: var(--primary-color);
+    background-color: var(--tertiary-color);
     font-size: 1rem;
     color: white;
     height: 50px;
     line-height: 50px;
     padding-left: 25px;
     text-align: center;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
-    
+
 }
+
+/* fin de footer */
+
