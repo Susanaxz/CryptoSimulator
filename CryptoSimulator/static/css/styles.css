@@ -51,6 +51,7 @@ a:hover {
     color: var(--tertiary-color);
 }
 
+
 html {
     height: 100%;
 
@@ -195,3 +196,61 @@ footer, .pie_pagina {
 
 /* fin de footer */
 
+/* estilos para el formulario de compra */
+
+.formulario-container {
+display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+form label {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+form select, form input {
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #ccc;
+}
+
+form .campo-formulario {
+    margin-bottom: 20px;
+}
+
+form .acciones {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+form .acciones input[type="submit"] {
+    font-size: 16px;
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+}
+
+form .acciones input[type="submit"]:hover {
+    background-color: var(--tertiary-color);
+}
+
+/* fin de estilos para el formulario de compra */
