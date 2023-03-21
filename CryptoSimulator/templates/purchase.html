@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+
+<script defer src="/static/js/purchase.js" data-coins="{{ coins|tojson }}"></script>
+
+{% endblock scripts %}
+
+
+
+{% block contenido%}
+
+
+<h1>Compra, Venta e Intercambio de Criptomonedas</h1>
+<div class="formulario-container">
+
+    <form novalidate id="mov-form">
+
+        {{ form.csrf_token }}
+        {{ form.id }}
+
+        <label for="operacion">Operación:</label>
+        <select id="operacion" name="operacion">
+            <option value="comprar">Comprar</option>
+            <option value="vender">Vender</option>
+            <option value="intercambiar">Intercambiar</option>
+        </select>
+        <br><br>
+
+
+        <div class="campo-formulario">
+            {{ form.from_currency.label }}
+            <select id="from_currency" name="from_currency">
+                <option value="" selected="selected" disabled="disabled">-- Selecciona una moneda de origen --</option>
+                {% for coin in coins %}
+                <option value="{{ coin }}">{{ coin }}</option>
+                {% endfor %}
+            </select>
+            {% if form.from_currency.errors %}
+            {% for mensaje in form.from_currency.errors %}
+            <div style="color: red">{{ mensaje }}</div>
+            {% endfor %}
+            {% endif %}
+            </div>
+        
+
+        <div class="campo-formulario">
+            {{ form.from_quantity.label }}
+            {{ form.from_quantity() }}
+            {% if form.from_quantity.errors %}
+            {% for mensaje in form.from_quantity.errors %}
+            <div style="color: red">{{ mensaje }}</div>
+            {% endfor %}
+            {% endif %}
+        </div>
+       
+
+
+<div class="campo-formulario">
+    {{ form.to_currency.label }}
+    <select id="to_currency" name="to_currency">
+        <option value="" selected="selected" disabled="disabled">-- Selecciona una moneda de cambio --</option>
+        {% for coin in coins %}
+        <option value="{{ coin }}">{{ coin }}</option>
+        {% endfor %}
+    </select>
+    {% if form.to_currency.errors %}
+    {% for mensaje in form.to_currency.errors %}
+    <div style="color: red">{{ mensaje }}</div>
+    {% endfor %}
+    {% endif %}
+
+
+
+<div class="acciones">
+    {{ form.submit }}
+</div>
+</div>
+</form>
+
+
+{% endblock contenido %}
