@@ -117,6 +117,11 @@ td {
     padding: 8px;
 }
 
+.tabla-con-sombra, txt {
+    text-align: center;
+    
+}
+
 /* fin de estilos de la tabla de la pagina de index */
 
 

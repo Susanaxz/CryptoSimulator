@@ -92,25 +92,25 @@ function actualizarPaginacion(page, num_pages) {
 function mostrarTransacciones() {
     console.log("Has llamado a la función mostrarTransacciones", this);
 
-    if (this.readyState === 4 && this.status === 200) {
-        console.log("La petición ha sido correcta");
-        const response = JSON.parse(peticion.responseText);
-        const transacciones = response.results;
-        console.log(response);
-        const page = response.page;
-        const num_pages = response.num_pages;
-        const pagination = document.querySelector(".pagination");
-        pagination.innerHTML = "";
+  if (this.readyState === 4 && this.status === 200) {
+    console.log("La petición ha sido correcta");
+    const response = JSON.parse(peticion.responseText);
+    const transacciones = response.results;
+    console.log(response);
+    const page = response.page;
+    const num_pages = response.num_pages;
+    const pagination = document.querySelector(".pagination");
+    pagination.innerHTML = "";
         
 
-        let html = "";
-        for (let i = 0; i < transacciones.length; i++) {
-            const trans = transacciones[i];
+    let html = "";
+    for (let i = 0; i < transacciones.length; i++) {
+      const trans = transacciones[i];
 
-            const date = new Date(trans.date);
-            const FormatDate = date.toLocaleDateString();
+      const date = new Date(trans.date);
+      const FormatDate = date.toLocaleDateString();
 
-            html = html + `
+      html = html + `
             <tr>
             <td class="fecha">${FormatDate}</td>
             <td>${trans.time}</td>
@@ -121,19 +121,30 @@ function mostrarTransacciones() {
             <td>${trans.rate}</td>
             </tr>
             `;
-        }   
+    }
 
-        const tabla = document.querySelector("#tabla-transacciones");
-        tabla.innerHTML = html;
+    const tabla = document.querySelector("#tabla-transacciones");
+    tabla.innerHTML = html;
 
-        actualizarPaginacion(page, num_pages);
+    actualizarPaginacion(page, num_pages);
+    } else if (this.status === 404) {
+    console.log("No hay registros");
+    // mensaje html
+    const html = `
+        <tr>
+        <td colspan="7">No hay ninguna transacción</td>
+        </tr>
+        `;
+    const txt = document.querySelector("#tabla-transacciones");
+    txt.innerHTML = html;
+
 
     } else {
-        console.log("La petición ha fallado");
-        alert("error al cargar las transacciones")
+      console.log("La petición ha fallado");
+      alert("Error al cargar las transacciones");
     }
-    // aquí irá el spinner
-}
+  }
+
 
 
 window.onload = function () { 
