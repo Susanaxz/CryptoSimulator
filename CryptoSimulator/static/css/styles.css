@@ -188,7 +188,7 @@ footer, .pie_pagina {
     line-height: 50px;
     padding-left: 25px;
     text-align: center;
-    position: absolute;
+    position:relative;
     bottom: 0;
     width: 100%;
 
@@ -199,8 +199,8 @@ footer, .pie_pagina {
 /* estilos para el formulario de compra */
 
 .formulario-container {
-display: flex;
-    flex-direction: column;
+    display: flex;
+    flex-direction:row-reverse;
     align-items: center;
     background-color: #ffffff;
     padding: 30px;
@@ -251,6 +251,14 @@ form .acciones input[type="submit"] {
 
 form .acciones input[type="submit"]:hover {
     background-color: var(--tertiary-color);
+}
+
+form .precioBase input[type="text"] {
+    display: none;
+    pointer-events: none;
+
+    
+    
 }
 
 /* fin de estilos para el formulario de compra */

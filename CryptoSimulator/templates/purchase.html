@@ -2,7 +2,7 @@
 
 {% block scripts %}
 
-<script defer src="/static/js/purchase.js" data-coins="{{ coins|tojson }}"></script>
+<script defer src="/static/js/purchase.js" data-coins="{{ COINS|tojson }}"></script>
 
 {% endblock scripts %}
 
@@ -69,7 +69,12 @@
     <div style="color: red">{{ mensaje }}</div>
     {% endfor %}
     {% endif %}
+    </div>
 
+    <div class="campo-formulario">
+        <label for="precioBase">Precio unitario de la moneda destino:</label>
+        <input type="number" id="precioBase" name="precioBase" oninput="PrecioUnitarioDestino()">
+    </div>
 
 
 <div class="acciones">
