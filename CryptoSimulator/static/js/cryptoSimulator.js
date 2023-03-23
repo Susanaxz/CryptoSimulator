@@ -2,23 +2,22 @@ const peticion = new XMLHttpRequest();
 console.log("Empiezo a ejecutar JS");
 
 function cargarTransacciones(page) {
-    console.log("Has llamado a la función cargarTransacciones()");
-    // aquí irá el spinner
+  console.log("Has llamado a la función cargarTransacciones()");
+  // aquí irá el spinner
 
-    let queryParams = getQueryParams(page);
+  let queryParams = getQueryParams(page);
 
-    let url = "http://127.0.0.1:5000/api/v1/transacciones";
+  let url = "http://127.0.0.1:5000/api/v1/transacciones";
 
-    if (queryParams) {
-        url += "?" + queryParams;
-    }
+  if (queryParams) {
+    url += "?" + queryParams;
+  }
 
-    console.log("URL construida para la API", url);
-    peticion.open("GET", url, true);
-    peticion.send();
+  console.log("URL construida para la API", url);
+  peticion.open("GET", url, true);
+  peticion.send();
 
-    console.log("FIN de la función cargarTransacciones()");
-
+  console.log("FIN de la función cargarTransacciones()");
 }
 
 function getQueryParams(page) {
@@ -87,10 +86,9 @@ function actualizarPaginacion(page, num_pages) {
     });
   });
 }
-    
 
 function mostrarTransacciones() {
-    console.log("Has llamado a la función mostrarTransacciones", this);
+  console.log("Has llamado a la función mostrarTransacciones", this);
 
   if (this.readyState === 4 && this.status === 200) {
     console.log("La petición ha sido correcta");
@@ -101,7 +99,6 @@ function mostrarTransacciones() {
     const num_pages = response.num_pages;
     const pagination = document.querySelector(".pagination");
     pagination.innerHTML = "";
-        
 
     let html = "";
     for (let i = 0; i < transacciones.length; i++) {
@@ -110,7 +107,9 @@ function mostrarTransacciones() {
       const date = new Date(trans.date);
       const FormatDate = date.toLocaleDateString();
 
-      html = html + `
+      html =
+        html +
+        `
             <tr>
             <td class="fecha">${FormatDate}</td>
             <td>${trans.time}</td>
@@ -127,7 +126,7 @@ function mostrarTransacciones() {
     tabla.innerHTML = html;
 
     actualizarPaginacion(page, num_pages);
-    } else if (this.status === 404) {
+  } else if (this.status === 404) {
     console.log("No hay registros");
     // mensaje html
     const html = `
@@ -137,22 +136,16 @@ function mostrarTransacciones() {
         `;
     const txt = document.querySelector("#tabla-transacciones");
     txt.innerHTML = html;
-
-
-    } else {
-      console.log("La petición ha fallado");
-      alert("Error al cargar las transacciones");
-    }
+  } else {
+    console.log("La petición ha fallado");
+    alert("Error al cargar las transacciones");
   }
+}
 
+window.onload = function () {
+  console.log("funcion onload");
+  // aquí irá el spinner
 
-
-window.onload = function () { 
-    console.log("funcion onload");
-    // aquí irá el spinner
-
-    cargarTransacciones();
-    peticion.onload = mostrarTransacciones;
-    
+  cargarTransacciones();
+  peticion.onload = mostrarTransacciones;
 };
-
