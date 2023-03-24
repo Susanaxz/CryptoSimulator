@@ -14,8 +14,11 @@ function cargarTransacciones(page) {
   }
 
   console.log("URL construida para la API", url);
-  peticion.open("GET", url, true);
+
+  peticion.open("GET", url);
   peticion.send();
+
+
 
   console.log("FIN de la función cargarTransacciones()");
 }

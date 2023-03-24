@@ -1,15 +1,13 @@
-console.log("----iniciamos el formulario----");
-
-const form = document.getElementById("mov-form"); // recogemos el formulario
-form.addEventListener("submit", sendForm); // añadimos el evento submit al formulario
+document.getElementById("mov-form").addEventListener("submit", sendForm);
 
 
 
 function sendForm(event) {
+  const form = event.target;
   console.log("Formulario enviado", event);
   event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
 
-  // Recoger los datos del formulario
+  // Recoger los datos del formulario y convertirlos en un objeto json para enviarlos a la API
   const formData = new FormData(form);
 
   // convertir los datos del formulario en un objeto json
@@ -18,8 +16,8 @@ function sendForm(event) {
     jsonObject[key] = value;
   }
 
-  // Enviar la petición con los datos a la API
-  fetch("http://127.0.0.1:5000/api/v1/transacciones", {
+//   // Enviar la petición con los datos a la API
+  fetch("http://127.0.0.1:5000/api/v1/transacciones",{
     method: "POST",
     headers: {
       "Content-Type": "application/json",

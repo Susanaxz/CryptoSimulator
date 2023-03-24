@@ -40,7 +40,6 @@ def listar_transacciones():
                 "page" : page,
                 "num_pages": num_pages
             }
-           
             status_code = 200
         
         else:
@@ -59,47 +58,38 @@ def listar_transacciones():
     return jsonify(resultado), status_code
 
 @app.route('/api/v1/transacciones' , methods=['POST'])
-def realizar_transaccion():
-    form = TransactionForm(request.form)
+def recoger_formulario(): # hacer una funcion que recoja los datos del formulario y los devuelva en formato json
+    formulario = TransactionForm()
     
-    if form.validate():
+    if formulario.validate_on_submit():
+        from_currency = formulario.from_currency.data
+        from_quantity = formulario.from_quantity.data
+        to_currency = formulario.to_currency.data
+        
         try:
-            """ obtenemos los datos del formulario y los convertimos a mayúsculas"""
-            from_currency = form.from_currency.data.upper()
-            from_quantity = form.from_quantity.data
-            to_currency = form.to_currency.data.upper()
-            to_quantity = 0.0
-            
-            cripto = Cripto(from_currency, from_quantity, to_currency, to_quantity)
-            cripto.consultar_cambio()
-            to_quantity = cripto.calcular_cambio() # calculamos la cantidad de la moneda de destino 
-            
-            db = DBManager(RUTA)
-            db.añadir_transaccion(from_currency, from_quantity, to_currency, to_quantity)
-            
+            cripto = Cripto(from_currency, from_quantity, to_currency) # creo un objeto de la clase Cripto y le paso los datos del formulario
+            # cripto.consultar_cambio()
+            # to_quantity = cripto.calcular_cambio()
             resultado = {
                 "status": "success",
-                "message": f"La transacción se ha realizado correctamente"
+                "from_currency": from_currency,
+                "from_quantity": from_quantity,
+                "to_currency": to_currency,
+                
             }
             status_code = 200
-            
-            
-        except Exception as error:
+        except APIError as error:
             resultado = {
                 "status": "error",
-                "message": "Error al realizar la transacción de compra"
+                "message": str(error)
             }
             status_code = 500
-         
-        
     else:
         resultado = {
             "status": "error",
             "message": "Error al validar los datos del formulario",
-            "errors": form.errors
+            "errors": formulario.errors
         }
         status_code = 400
-        
-        
-    print(resultado)     
+
     return jsonify(resultado), status_code

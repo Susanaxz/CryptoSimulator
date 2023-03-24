@@ -15,12 +15,12 @@ class APIError(Exception): # Creo una clase para manejar los errores
 
 # conexion a la API de CoinAPI
 class Cripto:
-    def __init__(self, from_currency, from_quantity, to_currency, to_quantity):
+    def __init__(self, from_currency, from_quantity, to_currency):
         self.monedas = COINS
         self.from_currency = from_currency
         self.from_quantity = from_quantity
         self.to_currency = to_currency
-        self.to_quantity = to_quantity
+        self.to_quantity = 0.0
         self.rate = 0.0
         
     def consultar_cambio(self):
