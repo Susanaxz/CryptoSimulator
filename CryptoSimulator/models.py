@@ -29,14 +29,15 @@ class Cripto:
         
         if response.status_code == 200:
             exchange = response.json()
-            self.rate = exchange.get('rate') # obt. el cambio de la API y lo guardamos en el atributo rate
+            self.rate = 1 / exchange.get('rate') # devuelve el valor de la tasa de cambio
         
         else:
             raise APIError(f'Error al consultar la API, status code: {response.status_code}, por el motivo {response.reason}')
         
     def calcular_cambio(self):
-        self.to_quantity = self.from_quantity * self.rate
-        return self.to_quantity
+        self.to_quantity = self.from_quantity / self.rate
+        return self.from_quantity
+        
     
         
         
@@ -74,10 +75,10 @@ class DBManager:
         
         return self.transacciones, num_pages
     
-    def añadir_transaccion(self):
+    def añadir_transaccion(self, from_currency, from_quantity, to_currency, to_quantity, rate, date, time):
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()
-        consulta = f'INSERT INTO transactions (from_currency, from_quantity, to_currency, to_quantity, rate) VALUES ("{self.from_currency}", {self.from_quantity}, "{self.to_currency}", {self.to_quantity}, {self.rate})'
+        consulta = f'INSERT INTO transactions (date, time, from_currency, from_quantity, to_currency, to_quantity, rate) VALUES ("{date}", "{time}", "{from_currency}", {from_quantity}, "{to_currency}", {to_quantity}, {rate})'
         cursor.execute(consulta)
         conexion.commit()
         conexion.close()

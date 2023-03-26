@@ -25,7 +25,7 @@ def status():
     return render_template('status.html')
 
 
-@app.route('/api/v1/transacciones/precios', methods=['GET'])
+@app.route('/api/v1/precios', methods=['GET'])
 def obtener_precios():
     moneda_origen = request.args.get('from_currency')
     moneda_destino = request.args.get('to_currency')
@@ -83,23 +83,24 @@ def recoger_formulario():
         from_quantity = formulario.from_quantity.data
         to_currency = formulario.to_currency.data
         
+        
         try:
             date = datetime.now().strftime('%Y-%m-%d')
             time = datetime.now().strftime('%H:%M:%S')
             cripto = Cripto(from_currency, from_quantity, to_currency)
             cripto.consultar_cambio()
-            to_quantity = cripto.calcular_cambio()
+            cripto.calcular_cambio()
 
             db = DBManager(RUTA)
-            # TODO: Arreglar esta función añadir_transaccion(NO FUNCIONA)
-            # db.añadir_transaccion(from_currency, from_quantity, to_currency, to_quantity, cripto.rate, date, time)
+            db.añadir_transaccion(from_currency, from_quantity, to_currency, cripto.to_quantity, cripto.rate, date, time)
 
             resultado = {
                 "status": "success",
                 "from_currency": from_currency,
                 "from_quantity": from_quantity,
                 "to_currency": to_currency,
-                "to_quantity": to_quantity
+                "to_quantity": cripto.to_quantity,
+                "message": "Transacción realizada con éxito"
             }
             status_code = 200
         except APIError as error:
