@@ -1,6 +1,48 @@
 document.getElementById("mov-form").addEventListener("submit", sendForm);
+controlarEvento();
 
+// Función para obtener el precio de la moneda de origen y destino
+function PrecioUnitarioDestino() {
+  var monedaOrigen = document.getElementById("from_currency").value;
+  var monedaDestino = document.getElementById("to_currency").value;
+  
+  fetch(`http://127.0.0.1:5000/api/v1/transacciones/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error en la petición");
+      }
+    })
+    .then((data) => {
+      if (data.status === "success") {
+        var rate = data.rate;
+        document.getElementById("precioBase").value = rate;
+      } else {
+       if (data.status === "error") {
+          console.log("Error al obtener el precio de la moneda");
+        }
+      }
+    })
+    .catch((error) => {
+      console.log("Error en la petición", error);
+    });
+}
 
+// funcion para controlar el evento cada vez que se cambia el valor de la moneda de origen y destino
+
+function controlarEvento() {
+  const monedaOrigen = document.getElementById("from_currency");
+  const monedaDestino = document.getElementById("to_currency");
+
+  monedaOrigen.addEventListener("change", PrecioUnitarioDestino);
+  monedaDestino.addEventListener("change", PrecioUnitarioDestino);
+}
 
 function sendForm(event) {
   const form = event.target;

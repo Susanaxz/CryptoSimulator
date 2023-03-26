@@ -3,6 +3,7 @@ from flask import jsonify, request, render_template
 from config import DEFAULT_PAG, PAG_SIZE, COINS
 from .models import DBManager, Cripto, APIError
 from .forms import TransactionForm
+from datetime import datetime
 
 
 RUTA = app.config.get('RUTA')
@@ -24,7 +25,23 @@ def status():
     return render_template('status.html')
 
 
-@app.route('/api/v1/transacciones')
+@app.route('/api/v1/transacciones/precios', methods=['GET'])
+def obtener_precios():
+    moneda_origen = request.args.get('from_currency')
+    moneda_destino = request.args.get('to_currency')
+    
+    cripto = Cripto(moneda_origen, 1, moneda_destino)
+    cripto.consultar_cambio()
+    rate = cripto.rate
+
+    resultado = {
+        "status": "success",
+        "rate": rate
+    }
+    return jsonify(resultado)
+
+
+@app.route('/api/v1/transacciones', methods=['GET'])
 def listar_transacciones():
     try:
         db = DBManager(RUTA)
@@ -58,7 +75,7 @@ def listar_transacciones():
     return jsonify(resultado), status_code
 
 @app.route('/api/v1/transacciones' , methods=['POST'])
-def recoger_formulario(): # hacer una funcion que recoja los datos del formulario y los devuelva en formato json
+def recoger_formulario():
     formulario = TransactionForm()
     
     if formulario.validate_on_submit():
@@ -67,15 +84,22 @@ def recoger_formulario(): # hacer una funcion que recoja los datos del formulari
         to_currency = formulario.to_currency.data
         
         try:
-            cripto = Cripto(from_currency, from_quantity, to_currency) # creo un objeto de la clase Cripto y le paso los datos del formulario
-            # cripto.consultar_cambio()
-            # to_quantity = cripto.calcular_cambio()
+            date = datetime.now().strftime('%Y-%m-%d')
+            time = datetime.now().strftime('%H:%M:%S')
+            cripto = Cripto(from_currency, from_quantity, to_currency)
+            cripto.consultar_cambio()
+            to_quantity = cripto.calcular_cambio()
+
+            db = DBManager(RUTA)
+            # TODO: Arreglar esta función añadir_transaccion(NO FUNCIONA)
+            # db.añadir_transaccion(from_currency, from_quantity, to_currency, to_quantity, cripto.rate, date, time)
+
             resultado = {
                 "status": "success",
                 "from_currency": from_currency,
                 "from_quantity": from_quantity,
                 "to_currency": to_currency,
-                
+                "to_quantity": to_quantity
             }
             status_code = 200
         except APIError as error:
