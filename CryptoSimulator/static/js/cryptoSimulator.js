@@ -110,6 +110,15 @@ function mostrarTransacciones() {
       const date = new Date(trans.date);
       const FormatDate = date.toLocaleDateString();
 
+      // Ajustar los decimales
+      const opciones = {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      };
+      const formateador = new Intl.NumberFormat("es-ES", opciones);
+      const criptoQuantity = formateador.format(trans.to_quantity);
+      const precioUd = formateador.format(trans.rate)
+
       html =
         html +
         `
@@ -119,8 +128,8 @@ function mostrarTransacciones() {
             <td>${trans.from_currency}</td>
             <td>${trans.from_quantity}</td>
             <td>${trans.to_currency}</td>
-            <td>${trans.to_quantity}</td>
-            <td>${trans.rate}</td>
+            <td>${criptoQuantity + " " + trans.to_currency}</td>
+            <td>${precioUd + " " + trans.from_currency}</td>
             </tr>
             `;
     }
