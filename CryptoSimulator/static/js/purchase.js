@@ -1,17 +1,20 @@
-document.getElementById("mov-form").addEventListener("submit", sendForm);
 controlarEvento();
+
 
 // Función para obtener el precio de la moneda de origen y destino
 function PrecioUnitarioDestino() {
   var monedaOrigen = document.getElementById("from_currency").value;
   var monedaDestino = document.getElementById("to_currency").value;
-  
-  fetch(`http://127.0.0.1:5000/api/v1/transacciones/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+
+  fetch(
+    `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => {
       if (response.status === 200) {
         return response.json();
@@ -24,7 +27,7 @@ function PrecioUnitarioDestino() {
         var rate = data.rate;
         document.getElementById("precioBase").value = rate;
       } else {
-       if (data.status === "error") {
+        if (data.status === "error") {
           console.log("Error al obtener el precio de la moneda");
         }
       }
@@ -39,9 +42,11 @@ function PrecioUnitarioDestino() {
 function controlarEvento() {
   const monedaOrigen = document.getElementById("from_currency");
   const monedaDestino = document.getElementById("to_currency");
+  const formulario = document.getElementById("mov-form");
 
   monedaOrigen.addEventListener("change", PrecioUnitarioDestino);
   monedaDestino.addEventListener("change", PrecioUnitarioDestino);
+  formulario.addEventListener("submit", sendForm);
 }
 
 function sendForm(event) {
@@ -58,8 +63,8 @@ function sendForm(event) {
     jsonObject[key] = value;
   }
 
-//   // Enviar la petición con los datos a la API
-  fetch("http://127.0.0.1:5000/api/v1/transacciones",{
+  //   // Enviar la petición con los datos a la API
+  fetch("http://127.0.0.1:5000/api/v1/transacciones", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
