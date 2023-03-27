@@ -6,35 +6,38 @@ function PrecioUnitarioDestino() {
   var monedaOrigen = document.getElementById("from_currency").value;
   var monedaDestino = document.getElementById("to_currency").value;
 
-  fetch(
-    `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error("Error en la petición");
+// TO FIX: arreglar el error TyperError. No dar el valor hasta tener las dos seleccionadas. 
+  if (monedaOrigen && monedaDestino) {
+    fetch(
+      `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    })
-    .then((data) => {
-      if (data.status === "success") {
-        var rate = data.rate;
-        document.getElementById("precioBase").value = rate;
-      } else {
-        if (data.status === "error") {
-          console.log("Error al obtener el precio de la moneda");
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Error en la petición");
         }
-      }
-    })
-    .catch((error) => {
-      console.log("Error en la petición", error);
-    });
+      })
+      .then((data) => {
+        if (data.status === "success") {
+          var rate = data.rate;
+          document.getElementById("precioBase").value = rate;
+        } else {
+          if (data.status === "error") {
+            console.log("Error al obtener el precio de la moneda");
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("Error en la petición", error);
+      });
+  }
 }
 
 // funcion para controlar el evento cada vez que se cambia el valor de la moneda de origen y destino
