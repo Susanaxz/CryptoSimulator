@@ -40,6 +40,26 @@ def obtener_precios():
     }
     return jsonify(resultado)
 
+@app.route('/api/v1/cartera', methods=['GET'])
+def update_cartera():
+    try:
+        db = DBManager(RUTA)
+        sql = 'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency' # devuelve el total de cada moneda que tenemos en la cartera
+        cartera = db.consultaSQL(sql)
+        resultado = {
+            "status": "success",
+            "results": cartera
+        }
+        status_code = 200
+    except Exception as error:
+        resultado = {
+            "status": "error",
+            "message": str(error)
+        }
+        status_code = 500
+        
+    return jsonify(resultado), status_code
+
 
 @app.route('/api/v1/transacciones', methods=['GET'])
 def listar_transacciones():

@@ -9,7 +9,7 @@
 body {
     background-color: var(--bg-color);
     font-family: 'Montserrat', sans-serif;
-    height: 100%;
+
 }
 
 header {
@@ -198,16 +198,21 @@ footer, .pie_pagina {
 
 /* estilos para el formulario de compra */
 
-.formulario-container {
+.container-global {
     display: flex;
-    flex-direction:row-reverse;
+    justify-content: space-between;
     align-items: center;
+    max-width: 1000px;
+    margin: 20px;
+}
+
+.formulario-container {
+    flex: 1 1 auto;
+    max-width: 600px;
     background-color: #ffffff;
     padding: 30px;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
 }
 
 
@@ -262,3 +267,23 @@ form .precioBase input[type="text"] {
 }
 
 /* fin de estilos para el formulario de compra */
+
+/* estilos para el wallet */
+
+.wallet {
+    flex: 0 0 auto;
+    width: 250px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.cartera-txt {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 800;
+    text-overflow: var(--important-color);
+}
