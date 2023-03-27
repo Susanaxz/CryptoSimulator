@@ -30,18 +30,18 @@ function obtenerCartera() {
 }
 
 function renderizarCartera(data) {
-    console.log("data recibida en renderCartera", data);
+  console.log("data recibida en renderCartera", data);
   const listadoCartera = document.getElementById("listado-cartera");
   listadoCartera.innerHTML = "";
 
-    data.forEach((moneda) => {
-      console.log("Moneda individual:", moneda);
-      const listItem = document.createElement("li");
-      listItem.textContent = `${
-        moneda.to_currency
-      }: ${moneda.total.toFixed(8)}`;
-      listItem.setAttribute("data-moneda", moneda.to_currency);
-      listItem.classList.add("moneda-item");
-      listadoCartera.appendChild(listItem);
-    });
+  data.forEach((moneda) => {
+    console.log("Moneda individual:", moneda);
+    const listItem = document.createElement("li");
+    
+    listItem.innerHTML = `<strong>${moneda.to_currency}</strong>: ${moneda.total.toFixed(4)}`;
+
+    listItem.setAttribute("data-moneda", moneda.to_currency);
+    listItem.classList.add("moneda-item");
+    listadoCartera.appendChild(listItem);
+  });
 }
