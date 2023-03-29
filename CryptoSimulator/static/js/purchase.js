@@ -66,8 +66,46 @@ function sendForm(event) {
     jsonObject[key] = value;
   }
 
-  //   // Enviar la petición con los datos a la API
-  fetch("http://127.0.0.1:5000/api/v1/transacciones", {
+  const operacion = jsonObject.operacion;
+
+  if (operacion === "comprar") {
+    realizarCompra(jsonObject);
+
+
+  } else if (operacion === "vender") {
+
+    fetch(`http://127.0.0.1:5000/api/v1/cartera`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Error en la petición");
+        }
+      })
+      .then((data) => {
+        realizarVenta(jsonObject, data);
+      })
+      .catch((error) => {
+        console.log("Error en la petición", error);
+      });
+    
+    
+  } else if (operacion === "intercambiar") {
+    realizarIntercambio(jsonObject);
+  } else {
+    console.log("Tipo de transacción desconocida");
+    return;
+  }
+}
+
+function realizarCompra(jsonObject) {
+  console.log("Realizando compra", jsonObject);
+  fetch("http://127.0.0.1:5000/api/v1/comprar", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -83,10 +121,136 @@ function sendForm(event) {
     })
     .then((data) => {
       if (data.status === "success") {
-        console.log("Transacción realizada con éxito");
+        console.log("Compra realizada con éxito");
+        alert("Compra realizada con éxito");
       } else {
-        console.log("Error en la transacción");
+        console.log("Error en la compra");
       }
+    })
+    .catch((error) => {
+      console.log("Error en la petición", error);
+    });
+}
+
+function realizarVenta(jsonObject, data) {
+  console.log("Realizando venta", jsonObject);
+  const from_currency = jsonObject.from_currency;
+  let venta_exitosa = false;
+
+  const cripto_cartera = data.results[0].find(
+    (cripto) => cripto.to_currency === from_currency
+  );
+  if (!cripto_cartera) {
+    alert('No tienes suficiente cantidad de ${from_currency} en tu cartera, por favor modifica la cantidad');
+  }
+
+  const cantidad_venta = Number(jsonObject.from_quantity);
+  const cantidad_cartera = Number(cripto_cartera.total);
+
+  if (cantidad_venta > cantidad_cartera) {
+    alert('No tienes suficiente cantidad de ${from_currency} en tu cartera, por favor modifica la cantidad');
+  }
+
+  console.log("Data", data);
+
+  // obtener el precio de la crypto
+  const monedaOrigen = from_currency;
+  const monedaDestino = "EUR";
+
+  fetch(
+    `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`, 
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error en la petición");
+      }
+    })
+    .then((data) => {
+      if (data.status === "success") {
+        const rate = data.rate;
+
+        const cantidad_venta = Number(jsonObject.to_quantity);
+
+        const valor_venta = cantidad_venta * rate;
+
+        valor_venta = valor_venta.jsonObject;
+
+        console.log("Venta realizada con éxito", jsonObject);
+
+        // realizar la venta
+
+        return fetch("http://127.0.0.1:5000/api/v1/vender", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonObject),
+        });
+      }
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error en la petición");
+      }
+    })
+    .then((data) => {
+      if (data.status === "success") {
+        console.log("Venta realizada con éxito");
+        alert("Venta realizada con éxito");
+        venta_exitosa = true;
+        
+        obtenerCartera();
+
+      } else {
+        console.log("Error en la venta");
+      }
+    })
+    .catch((error) => {
+      console.log("Error en la petición", error);
+    });
+  
+  if (venta_exitosa) {
+    actualizarCartera(cripto_cartera, cantidad_venta);
+  }
+}
+  
+
+
+
+function actualizarCartera(cripto_cartera, cantidad_venta) {
+  cripto_cartera.total -= cantidad_venta;
+
+  const carteraId = cripto_cartera.id;
+  const carteraActualizada = {
+    total: cripto_cartera.total,
+  };
+
+  fetch(`http://127.0.0.1:5000/api/v1/cartera`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(carteraActualizada),
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error en la petición");
+      }
+    })
+    .then((data) => {
+      console.log("Cartera actualizada con éxito", data);
     })
     .catch((error) => {
       console.log("Error en la petición", error);

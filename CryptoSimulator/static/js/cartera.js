@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   obtenerCartera();
 });
 
-function obtenerCartera() {
+window.obtenerCartera = function() {
   fetch("http://127.0.0.1:5000/api/v1/cartera", {
     method: "GET",
     headers: {
@@ -45,3 +45,4 @@ function renderizarCartera(data) {
     listadoCartera.appendChild(listItem);
   });
 }
+
