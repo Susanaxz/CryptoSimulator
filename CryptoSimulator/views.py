@@ -25,6 +25,7 @@ def status():
     return render_template('status.html')
 
 
+
 @app.route('/api/v1/precios', methods=['GET'])
 def obtener_precios():
     moneda_origen = request.args.get('from_currency')
@@ -41,7 +42,7 @@ def obtener_precios():
     return jsonify(resultado)
 
 @app.route('/api/v1/cartera', methods=['GET'])
-def update_cartera():
+def obtener_cartera():
     try:
         db = DBManager(RUTA)
         sql = 'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency' # devuelve el total de cada moneda que tenemos en la cartera
@@ -60,6 +61,27 @@ def update_cartera():
         
     return jsonify(resultado), status_code
 
+@app.route('/api/v1/cartera', methods=['PUT'])
+def actualizar_cartera():
+    try:
+        db = DBManager(RUTA)
+        sql = 'UPDATE transactions SET to_quantity = to_quantity - from_quantity WHERE from_currency = from_currency AND to_currency = to_currency'
+        cartera = db.consultaSQL(sql)
+        resultado = {
+            "status": "success",
+            "message": "Cartera actualizada con éxito",
+            "results": cartera
+        }
+        status_code = 200
+        
+    except Exception as error:
+        resultado = {
+            "status": "error",
+            "message": str(error)
+        }
+        status_code = 500
+        
+    return jsonify(resultado), status_code
 
 @app.route('/api/v1/transacciones', methods=['GET'])
 def listar_transacciones():
@@ -94,8 +116,8 @@ def listar_transacciones():
         
     return jsonify(resultado), status_code
 
-@app.route('/api/v1/transacciones' , methods=['POST'])
-def recoger_formulario():
+@app.route('/api/v1/comprar' , methods=['POST'])
+def comprar_crypto():
     formulario = TransactionForm()
     
     if formulario.validate_on_submit():
@@ -138,3 +160,53 @@ def recoger_formulario():
         status_code = 400
 
     return jsonify(resultado), status_code
+
+@app.route('/api/v1/vender', methods=['POST'])
+def vender_crypto():
+    try:
+        data = request.json
+        print(f"data: {data}")
+        from_currency = data['from_currency']
+        print(f"from_currency: {from_currency}")
+        from_quantity = data['from_quantity']
+        print(f"from_quantity: {from_quantity}")
+        to_currency = data['to_currency']
+        print(f"to_currency: {to_currency}")
+        rate = data['rate']
+        print(f"rate: {rate}")
+        
+        # data = request.json
+        # from_currency = data['from_currency']
+        # from_quantity = data['from_quantity']
+        # to_currency = data['to_currency']
+        # rate = data['rate']
+        
+        db = DBManager(RUTA)
+        resultado = db.realizar_venta(from_currency, from_quantity, to_currency, rate)
+        
+        if resultado == 'success':
+            response = {
+                "status": "success",
+                "message": "Venta realizada con éxito"
+            }
+            status_code = 200
+        else:
+            response = {
+                "status": "error",
+                "message": "No se ha podido realizar la venta"
+            }
+            status_code = 500
+            
+    except Exception as error:
+        response = {
+            "status": "error",
+            "message": "error al procesar la solicitud de venta",
+            "error": str(error)
+        }
+        status_code = 400
+        
+    return jsonify(response), status_code
+        
+
+
+
