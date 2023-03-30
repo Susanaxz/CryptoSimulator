@@ -41,12 +41,47 @@ def obtener_precios():
     }
     return jsonify(resultado)
 
+@app.route('/api/v1/ventas', methods=['GET'])
+def obtener_ventas():
+    try:
+        db = DBManager(RUTA)
+        sql = 'SELECT from_currency, to_currency, SUM(from_quantity) as total FROM transactions WHERE to_currency = "EUR" GROUP BY from_currency, to_currency'
+        
+        ventas = db.consultaSQL(sql)
+        
+        resultado = {
+            "status": "success",
+            "results": ventas
+        }
+        status_code = 200
+    except Exception as error:
+        resultado = {
+            "status": "error",
+            "message": str(error)
+        }
+        status_code = 500
+        
+    return jsonify(resultado), status_code
+
 @app.route('/api/v1/cartera', methods=['GET'])
 def obtener_cartera():
     try:
         db = DBManager(RUTA)
-        sql = 'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency' # devuelve el total de cada moneda que tenemos en la cartera
+        sql = '''
+            SELECT
+            ifnull(suma_to_quantity.moneda,suma_from_quantity.moneda) as to_currency, ifnull((suma_from_quantity.total - (-suma_to_quantity.total)),suma_from_quantity.total) as total
+            FROM transactions left join 
+            (SELECT to_currency as moneda, SUM(to_quantity) as total FROM transactions GROUP BY to_currency) as suma_from_quantity
+            on suma_from_quantity.moneda = transactions.to_currency
+            left JOIN
+            (SELECT from_currency as moneda, SUM(from_quantity) as total FROM transactions GROUP BY from_currency) as suma_to_quantity
+            on suma_to_quantity.moneda = suma_from_quantity.moneda
+
+            group by to_currency
+        
+        '''       
         cartera = db.consultaSQL(sql)
+        
         resultado = {
             "status": "success",
             "results": cartera
@@ -63,24 +98,28 @@ def obtener_cartera():
 
 @app.route('/api/v1/cartera', methods=['PUT'])
 def actualizar_cartera():
+    data = request.json
+    from_currency = data['from_currency']
+    from_quantity = data['from_quantity']
+    to_currency = data.get('to_currency', None)
+    to_quantity = data.get('to_quantity', None)
+
     try:
         db = DBManager(RUTA)
-        sql = 'UPDATE transactions SET to_quantity = to_quantity - from_quantity WHERE from_currency = from_currency AND to_currency = to_currency'
-        cartera = db.consultaSQL(sql)
+        cartera_actualizada = db.actualizar_cartera(from_currency, from_quantity, to_currency, to_quantity)
         resultado = {
             "status": "success",
             "message": "Cartera actualizada con éxito",
-            "results": cartera
+            "cartera": cartera_actualizada
         }
         status_code = 200
-        
     except Exception as error:
         resultado = {
             "status": "error",
             "message": str(error)
         }
         status_code = 500
-        
+
     return jsonify(resultado), status_code
 
 @app.route('/api/v1/transacciones', methods=['GET'])
@@ -172,17 +211,12 @@ def vender_crypto():
         print(f"from_quantity: {from_quantity}")
         to_currency = data['to_currency']
         print(f"to_currency: {to_currency}")
-        rate = data['rate']
-        print(f"rate: {rate}")
-        
-        # data = request.json
-        # from_currency = data['from_currency']
-        # from_quantity = data['from_quantity']
-        # to_currency = data['to_currency']
-        # rate = data['rate']
+        valor_venta= data['valor_venta']
+        print(f"rate: {valor_venta}")
+
         
         db = DBManager(RUTA)
-        resultado = db.realizar_venta(from_currency, from_quantity, to_currency, rate)
+        resultado = db.realizar_venta(from_currency, from_quantity, to_currency, valor_venta)
         
         if resultado == 'success':
             response = {
