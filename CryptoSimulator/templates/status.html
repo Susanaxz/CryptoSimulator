@@ -2,16 +2,40 @@
 
 {% block scripts%}
 
-<script src="/static/js/cryptoSimulator.js"></script>
+<script defer src="/static/js/status.js"></script>
+<script defer src="/static/js/cartera.js"></script>
 
 {% endblock scripts%}
 
 {% block contenido%}
 <h1 class="titulo_entrada">Estado de la inversión</h1>
+<div class="container-status"></div>
 
+<section class="seccion-status">
 
+    <div class="wallet">
+        <h2 class="cartera-txt">Stock Cryptos</h2>
+        <ul id="listado-cartera"></ul>
+    </div>
 
+    <table class="tabla-status">
+        <thead>
+            <tr>
+                <th>Total invertido en EUR</th>
+                <th>Saldo de euros invertidos</th>
+                <th>Valor actual en EUR</th>
+            </tr>
+        </thead>
+        
+            <tr>
+                <td id="total_invertido"></td>
+                <td id="saldo_euros_invertidos"></td>
+                <td id="valor_actual_cartera"></td>
+            </tr>
+        
+    </table>
 
+</section>
 
 
 {% endblock contenido %}
