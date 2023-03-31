@@ -136,11 +136,12 @@ function realizarVenta(jsonObject, data) {
   console.log("Realizando venta", jsonObject);
   const from_currency = jsonObject.from_currency;
   let venta_exitosa = false;
+  
+  const cripto_cartera = data.results[from_currency];
 
-  const cripto_cartera = data.results[0].find(
-    (cripto) => cripto.to_currency === from_currency
-  );
 
+  /* TO FIX: arreglar que salte un fallor cuando no hay suficiente dinero en la cartera */
+  
   if (!cripto_cartera) {
     alert(`No tienes ${from_currency} en tu cartera, por favor modifica la cantidad`);
   }
@@ -148,11 +149,13 @@ function realizarVenta(jsonObject, data) {
   const cantidad_venta = parseFloat(jsonObject.from_quantity);
   const cantidad_cartera = parseFloat(cripto_cartera.total);
 
+  console.log(`Cantidad de ${from_currency} en cartera: ${cantidad_cartera}`);
+  console.log(`Cantidad de ${from_currency} a vender: ${cantidad_venta}`);
+
   if (cantidad_venta > cantidad_cartera) {
     alert(
       `No tienes suficientes ${from_currency} en tu cartera, por favor modifica la cantidad`
     );
-    showError(from_currency);
     return;
   }
 
@@ -239,7 +242,6 @@ function realizarVenta(jsonObject, data) {
 function actualizarCartera(cripto_cartera, cantidad_venta) {
   cripto_cartera.total -= cantidad_venta;
 
-  const carteraId = cripto_cartera.id;
   const carteraActualizada = {
     total: cripto_cartera.total,
   };

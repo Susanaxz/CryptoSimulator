@@ -19,7 +19,7 @@ window.obtenerCartera = function() {
     .then((data) => {
       if (data.status === "success") {
         console.log("datos recibidos", data);
-        renderizarCartera(data.results[0]);
+        renderizarCartera(data.results);
       } else {
         console.log("Error al obtener la cartera");
       }
@@ -34,11 +34,13 @@ function renderizarCartera(data) {
   const listadoCartera = document.getElementById("listado-cartera");
   listadoCartera.innerHTML = "";
 
-  data.forEach((moneda) => {
-    console.log("Moneda individual:", moneda);
+  Object.entries(data).forEach(([moneda, total]) => { 
+    console.log("Moneda individual:", moneda, total);
+    
+
     const listItem = document.createElement("li");
     
-    listItem.innerHTML = `<strong>${moneda.to_currency}</strong>: ${moneda.total.toFixed(4)}`;
+    listItem.innerHTML = `<strong>${moneda}</strong>: ${total.toFixed(4)}`;
 
     listItem.setAttribute("data-moneda", moneda.to_currency);
     listItem.classList.add("moneda-item");

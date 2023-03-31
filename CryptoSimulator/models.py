@@ -98,7 +98,7 @@ class DBManager:
             date = datetime.now().strftime('%Y-%m-%d')
             time = datetime.now().strftime('%H:%M:%S')
 
-            if not self.actualizar_cartera(from_currency, from_quantity, to_currency, to_quantity):
+            if not self.actualizar_cartera():
                 return "error"
 
             self.añadir_transaccion(from_currency, -from_quantity, to_currency, -to_quantity, date, time)
@@ -115,28 +115,38 @@ class DBManager:
         finally:
             conexion.close()
             
-    def actualizar_cartera(self, from_currency, from_quantity, to_currency=None, to_quantity=None):
+    def actualizar_cartera(self):
         conexion = sqlite3.connect(self.ruta)
-        cursor = conexion.cursor()
+        cursor_compras = conexion.cursor()
+        cursor_ventas = conexion.cursor()
+        monedas = COINS
+                
+        sql_compras = 'SELECT from_currency, SUM(from_quantity) as total FROM transactions GROUP BY from_currency'
+        sql_ventas = 'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency'
+
+        compras_resultado = cursor_compras.execute(sql_compras)
+        ventas_resultado = cursor_ventas.execute(sql_ventas)
         
-        print(from_currency, from_quantity, to_currency, to_quantity)
-        consulta = f'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency'
-        print(consulta)
-        cursor.execute(consulta)
-        monedas_totales = cursor.fetchall()
+        
+        ventas = {}
+        for venta in ventas_resultado:
+            ventas[venta[0]] = venta[1]
+            
+        compras = {}
+        for compra in compras_resultado:
+            compras[compra[0]] = compra[1]
 
-        # Restar la cantidad vendida
-        if to_currency is not None and to_quantity is not None:
-            for i, (from_currency, from_quantity) in enumerate(monedas_totales):
-                
-                if from_currency == from_currency:
-                    nueva_cantidad = from_quantity - from_quantity
-                    monedas_totales[i] = (from_currency, nueva_cantidad)
-                
-        elif from_currency == to_currency: 
-            print("error, no se puede vender la misma moneda")
-
+        for moneda in monedas:
+            compras.setdefault(moneda, 0)
+            ventas.setdefault(moneda, 0)
+        
+        cartera = {}
+        for moneda in monedas:
+            if moneda != 'EUR':
+                cartera[moneda] = ventas[moneda] + compras[moneda]
+            
+         
         conexion.commit()
         conexion.close()
 
-        return monedas_totales
+        return cartera

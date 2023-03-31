@@ -68,26 +68,14 @@ def obtener_ventas():
 def obtener_cartera():
     try:
         db = DBManager(RUTA)
-        sql = '''
-            SELECT
-            ifnull(suma_to_quantity.moneda,suma_from_quantity.moneda) as to_currency, ifnull((suma_from_quantity.total - (-suma_to_quantity.total)),suma_from_quantity.total) as total
-            FROM transactions left join 
-            (SELECT to_currency as moneda, SUM(to_quantity) as total FROM transactions GROUP BY to_currency) as suma_from_quantity
-            on suma_from_quantity.moneda = transactions.to_currency
-            left JOIN
-            (SELECT from_currency as moneda, SUM(from_quantity) as total FROM transactions GROUP BY from_currency) as suma_to_quantity
-            on suma_to_quantity.moneda = suma_from_quantity.moneda
-
-            group by to_currency
-        
-        '''       
-        cartera = db.consultaSQL(sql)
+        cartera = db.actualizar_cartera()
         
         resultado = {
             "status": "success",
             "results": cartera
         }
         status_code = 200
+         
     except Exception as error:
         resultado = {
             "status": "error",
