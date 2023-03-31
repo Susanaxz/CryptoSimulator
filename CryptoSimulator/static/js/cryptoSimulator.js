@@ -116,8 +116,10 @@ function mostrarTransacciones() {
         maximumFractionDigits: 4,
       };
       const formateador = new Intl.NumberFormat("es-ES", opciones);
+      const precioUd = formateador.format(trans.from_quantity / trans.to_quantity);
       const criptoQuantity = formateador.format(trans.to_quantity);
-      const precioUd = formateador.format(trans.rate)
+
+
 
       html =
         html +

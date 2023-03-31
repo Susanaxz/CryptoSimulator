@@ -34,6 +34,7 @@ def obtener_precios():
     cripto = Cripto(moneda_origen, 1, moneda_destino)
     cripto.consultar_cambio()
     rate = cripto.rate
+    print(cripto.rate)
 
     resultado = {
         "status": "success",
@@ -173,7 +174,7 @@ def comprar_crypto():
             cripto.calcular_cambio()
 
             db = DBManager(RUTA)
-            db.añadir_transaccion(from_currency, from_quantity, to_currency, cripto.to_quantity, cripto.rate, date, time)
+            db.añadir_transaccion(from_currency, from_quantity, to_currency, cripto.to_quantity, date, time)
 
             resultado = {
                 "status": "success",
@@ -216,7 +217,8 @@ def vender_crypto():
 
         
         db = DBManager(RUTA)
-        resultado = db.realizar_venta(from_currency, from_quantity, to_currency, valor_venta)
+        resultado = db.realizar_venta(from_currency, from_quantity, to_currency)
+
         
         if resultado == 'success':
             response = {
