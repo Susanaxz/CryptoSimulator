@@ -123,6 +123,7 @@ function realizarCompra(jsonObject) {
       if (data.status === "success") {
         console.log("Compra realizada con éxito");
         alert("Compra realizada con éxito");
+        location.reload();
       } else {
         console.log("Error en la compra");
       }
