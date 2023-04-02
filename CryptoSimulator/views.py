@@ -230,7 +230,38 @@ def vender_crypto():
         status_code = 400
         
     return jsonify(response), status_code
+
+@app.route('/api/v1/intercambiar', methods=['POST'])
+def intercambiar_crypto():
+    try:
+        data = request.json
+        from_currency = data['from_currency']
+        from_quantity = data['from_quantity']
+        to_currency = data['to_currency']
         
+        db = DBManager(RUTA)
+        resultado = db.realizar_intercambio(from_currency, from_quantity, to_currency)
 
-
-
+        
+        if resultado == 'success':
+            response = {
+                "status": "success",
+                "message": "Intercambio realizado con éxito"
+            }
+            status_code = 200
+        else:
+            response = {
+                "status": "error",
+                "message": "No se ha podido realizar el intercambio"
+            }
+            status_code = 500
+            
+    except Exception as error:
+        response = {
+            "status": "error",
+            "message": "error al procesar la solicitud de intercambio",
+            "error": str(error)
+        }
+        status_code = 400
+        
+    return jsonify(response), status_code

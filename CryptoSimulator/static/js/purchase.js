@@ -133,6 +133,65 @@ function realizarCompra(jsonObject) {
     });
 }
 
+function realizarIntercambio(jsonObject) {
+  console.log("Realizando intercambio", jsonObject);
+  const from_currency = jsonObject.from_currency;
+  const from_quantity = jsonObject.from_quantity;
+  const to_currency = jsonObject.to_currency;
+  
+  // comprobar la cartera
+  fetch(`http://127.0.0.1:5000/api/v1/cartera`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error en la petición de cartera");
+      }
+    })
+    .then((data) => {
+      const cripto_cartera = data.results[from_currency];
+
+      if (!cripto_cartera || cripto_cartera < from_quantity) {
+        alert(`No tienes suficiente ${from_currency} en tu cartera, por favor modifica la cantidad`);
+        return;
+      }
+
+      // realizar el intercambio
+
+      fetch("http://127.0.0.1:5000/api/v1/intercambiar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jsonObject),
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error("Error en la petición de intercambio");
+          }
+        })
+        .then((data) => {
+          console.log(data);
+          const to_quantity = data.to_quantity;
+          obtenerCartera();
+          alert(`Has intercambiado ${from_quantity} ${from_currency} por ${to_quantity} ${to_currency}`);
+        })
+        .catch((error) => {
+          console.log("Error en la petición", error);
+        });
+    })
+    .catch((error) => {
+      console.log("Error en la petición", error);
+    });
+}
+
 function realizarVenta(jsonObject, data) {
   console.log("Realizando venta", jsonObject);
   const from_currency = jsonObject.from_currency;

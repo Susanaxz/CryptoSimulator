@@ -115,6 +115,37 @@ class DBManager:
         finally:
             conexion.close()
             
+    def realizar_intercambio(self, from_currency, from_quantity, to_currency):
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        
+        try:
+            from_quantity = float(from_quantity)
+            cripto = Cripto(from_currency, from_quantity, to_currency)
+            cripto.consultar_cambio()
+            to_quantity = from_quantity / cripto.rate
+
+
+            date = datetime.now().strftime('%Y-%m-%d')
+            time = datetime.now().strftime('%H:%M:%S')
+
+            if not self.actualizar_cartera():
+                return "error"
+
+            self.añadir_transaccion(from_currency, -from_quantity, to_currency, to_quantity, date, time)
+
+            conexion.commit()
+
+            return "success"
+
+        except Exception as error:
+            print(f"Error al realizar el intercambio: {error}")
+            conexion.rollback()
+            return "error"
+
+        finally:
+            conexion.close()
+            
     def actualizar_cartera(self):
         conexion = sqlite3.connect(self.ruta)
         cursor_compras = conexion.cursor()
