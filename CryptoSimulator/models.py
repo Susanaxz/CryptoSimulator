@@ -152,8 +152,8 @@ class DBManager:
         cursor_ventas = conexion.cursor()
         monedas = COINS
                 
-        sql_compras = 'SELECT from_currency, SUM(from_quantity) as total FROM transactions GROUP BY from_currency'
-        sql_ventas = 'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency'
+        sql_ventas = 'SELECT from_currency, SUM(from_quantity) as total FROM transactions GROUP BY from_currency'
+        sql_compras = 'SELECT to_currency, SUM(to_quantity) as total FROM transactions GROUP BY to_currency'
 
         compras_resultado = cursor_compras.execute(sql_compras)
         ventas_resultado = cursor_ventas.execute(sql_ventas)
@@ -170,14 +170,61 @@ class DBManager:
         for moneda in monedas:
             compras.setdefault(moneda, 0)
             ventas.setdefault(moneda, 0)
+            
+        print("Compras:", compras)
+        print("Ventas:", ventas)
         
         cartera = {}
         for moneda in monedas:
             if moneda != 'EUR':
                 cartera[moneda] = ventas[moneda] + compras[moneda]
             
-         
+        print("Cartera:", cartera)
+        
         conexion.commit()
         conexion.close()
 
         return cartera
+    
+    def calcular_status(self):
+        # calcula el saldo de euros invertidos(euros usados para la compra - euros obtenidos por la venta)
+        
+        sql_eur_comprados = 'SELECT SUM(from_quantity) as total_eur_comprados FROM transactions WHERE from_currency = "EUR"'
+        sql_eur_obtenidos = 'SELECT SUM(to_quantity) as total_eur_obtenidos FROM transactions WHERE to_currency = "EUR"'
+        
+        euros_comprados_result, _  = self.consultaSQL(sql_eur_comprados)
+        euros_obtenidos_result, _  = self.consultaSQL(sql_eur_obtenidos)
+        
+        print(euros_comprados_result)
+        print(euros_obtenidos_result)
+        
+        total_euros_comprados = euros_comprados_result[0].get('total_eur_comprados')
+        total_euros_obtenidos = euros_obtenidos_result[0].get('total_eur_obtenidos')
+        
+        total_euros_comprados = total_euros_comprados if total_euros_comprados is not None else 0
+        total_euros_obtenidos = total_euros_obtenidos if total_euros_obtenidos is not None else 0
+        
+        saldo_euros_invertidos = total_euros_comprados + total_euros_obtenidos
+        total_euros_invertidos = total_euros_comprados
+        
+        
+        # calcula el valor de la cartera en euros
+        
+        cartera = self.actualizar_cartera()
+        valor_actual_cartera_euros = 0.0
+        
+        for moneda, cantidad in cartera.items():
+            if moneda != 'EUR':
+                cripto = Cripto(moneda, cantidad, 'EUR')
+                cripto.consultar_cambio()
+                valor_actual_euros = cantidad / cripto.rate
+                valor_actual_cartera_euros += valor_actual_euros
+                
+               
+        
+        return {
+                'saldo_euros_invertidos': saldo_euros_invertidos,
+                'total_euros_invertidos': total_euros_invertidos,
+                'valor_actual_cartera_euros': valor_actual_cartera_euros,
+                }
+        

@@ -265,3 +265,25 @@ def intercambiar_crypto():
         status_code = 400
         
     return jsonify(response), status_code
+
+@app.route('/api/v1/status', methods=['GET'])
+def obtener_status():
+    try:
+        db = DBManager(RUTA)
+        status = db.calcular_status()
+        
+        resultado = {
+            "status": "success",
+            "results": status
+        }
+        status_code = 200
+    
+    except Exception as error:
+        resultado = {
+            "status": "error",
+            "message": f'Error al obtener el status de la cartera: {error}'
+        }
+        status_code = 500
+        
+        
+    return jsonify(resultado), status_code
