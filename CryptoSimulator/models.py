@@ -136,7 +136,7 @@ class DBManager:
 
             conexion.commit()
 
-            return "success"
+            return "success", to_quantity
 
         except Exception as error:
             print(f"Error al realizar el intercambio: {error}")
