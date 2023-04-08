@@ -6,7 +6,6 @@ function PrecioUnitarioDestino() {
   var monedaOrigen = document.getElementById("from_currency").value;
   var monedaDestino = document.getElementById("to_currency").value;
 
-// TO FIX: arreglar el error TyperError. No dar el valor hasta tener las dos seleccionadas. 
   if (monedaOrigen && monedaDestino) {
     fetch(
       `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`,
@@ -88,6 +87,17 @@ function sendForm(event) {
         }
       })
       .then((data) => {
+        const from_currency = jsonObject.from_currency;
+        const cripto_cartera = data.results[from_currency];
+
+        if (
+          !cripto_cartera ||
+          cripto_cartera.total < jsonObject.from_quantity
+        ) {
+          alert(`No tienes suficiente ${from_currency} para vender.`);
+          return;
+        }
+
         realizarVenta(jsonObject, data);
       })
       .catch((error) => {
@@ -194,32 +204,35 @@ function realizarIntercambio(jsonObject) {
 
 function realizarVenta(jsonObject, data) {
   console.log("Realizando venta", jsonObject);
+  const from_quantity = jsonObject.from_quantity;
+  const to_currency = jsonObject.to_currency;
   const from_currency = jsonObject.from_currency;
   let venta_exitosa = false;
   
   const cripto_cartera = data.results[from_currency];
 
+// comprobar la cartera
+  fetch(`http://127.0.0.1:5000/api/v1/cartera`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Error en la petición de cartera");
+      }
+    })
+    .then((data) => {
+      const cripto_cartera = data.results[from_currency];
 
-  /* TO FIX: arreglar que salte un fallor cuando no hay suficiente dinero en la cartera */
-  
-  if (!cripto_cartera) {
-    alert(`No tienes ${from_currency} en tu cartera, por favor modifica la cantidad`);
-  }
- 
-  const cantidad_venta = parseFloat(jsonObject.from_quantity);
-  const cantidad_cartera = parseFloat(cripto_cartera.total);
+      if (!cripto_cartera || cripto_cartera < from_quantity) {
+        alert(`No tienes suficiente ${from_currency} en tu cartera, por favor modifica la cantidad`);
+        return;
+      }
 
-  console.log(`Cantidad de ${from_currency} en cartera: ${cantidad_cartera}`);
-  console.log(`Cantidad de ${from_currency} a vender: ${cantidad_venta}`);
-
-  if (cantidad_venta > cantidad_cartera) {
-    alert(
-      `No tienes suficientes ${from_currency} en tu cartera, por favor modifica la cantidad`
-    );
-    return;
-  }
-
-  console.log("Data", data);
 
   // obtener el precio de la crypto
   const monedaOrigen = from_currency;
@@ -279,50 +292,16 @@ function realizarVenta(jsonObject, data) {
       if (data.status === "success") {
         console.log("Venta realizada con éxito");
         alert("Venta realizada con éxito");
-        venta_exitosa = true;
-        
         obtenerCartera();
-
+        venta_exitosa = true;
+       
       } else {
         console.log("Error en la venta");
       }
     })
-    .catch((error) => {
-      console.log("Error en la petición", error);
-    });
-  
-  if (venta_exitosa) {
-    actualizarCartera(cripto_cartera, cantidad_venta);
-  }
-}
-  
-
-
-
-function actualizarCartera(cripto_cartera, cantidad_venta) {
-  cripto_cartera.total -= cantidad_venta;
-
-  const carteraActualizada = {
-    total: cripto_cartera.total,
-  };
-
-  fetch(`http://127.0.0.1:5000/api/v1/cartera`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(carteraActualizada),
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error("Error en la petición");
-      }
-    })
-    .then((data) => {
-      console.log("Cartera actualizada con éxito", data);
-    })
+   
+    }
+  )
     .catch((error) => {
       console.log("Error en la petición", error);
     });
