@@ -40,7 +40,8 @@ function renderizarCartera(data) {
 
     const listItem = document.createElement("li");
     
-    listItem.innerHTML = `<strong>${moneda}</strong>: ${total.toFixed(4)}`;
+    // listItem.innerHTML = `<strong>${moneda}</strong>: ${total.toFixed(4)}`;
+    listItem.innerHTML = `<strong>${moneda}</strong>: ${total}`;
 
     listItem.setAttribute("data-moneda", moneda.to_currency);
     listItem.classList.add("moneda-item");
