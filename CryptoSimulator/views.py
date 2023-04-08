@@ -239,14 +239,16 @@ def intercambiar_crypto():
         from_quantity = data['from_quantity']
         to_currency = data['to_currency']
         
+        
         db = DBManager(RUTA)
-        resultado = db.realizar_intercambio(from_currency, from_quantity, to_currency)
+        resultado, to_quantity = db.realizar_intercambio(from_currency, from_quantity, to_currency)
 
         
         if resultado == 'success':
             response = {
                 "status": "success",
-                "message": "Intercambio realizado con éxito"
+                "message": "Intercambio realizado con éxito",
+                "to_quantity": to_quantity
             }
             status_code = 200
         else:
