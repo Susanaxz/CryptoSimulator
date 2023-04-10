@@ -1,5 +1,57 @@
 controlarEvento();
 
+const comprar = ["EUR"];
+const vender = [
+  "BTC",
+  "ETH",
+  "USDT",
+  "ADA",
+  "SOL",
+  "XRP",
+  "DOT",
+  "DOGE",
+  "SHIB",
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  const SeleccionOperacion = document.getElementById("operacion");
+  const SeleccionOrigen = document.getElementById("from_currency");
+  const SeleccionDestino = document.getElementById("to_currency");
+
+  const actualizarOpciones = (seleccion, opciones) => {
+    seleccion.innerHTML =
+      '<option value="" selected="selected" disabled="disabled">-- Selecciona una moneda --</option>';
+
+    for (const coin of opciones) {
+      const opcion = document.createElement("option");
+      opcion.value = coin;
+      opcion.textContent = coin;
+      seleccion.appendChild(opcion);
+    }
+  };
+ // Función para actualizar los menús desplegables de las monedas de origen y destino
+  const actualizarMonedas = () => {
+    const OperacionSeleccionada = SeleccionOperacion.value;
+
+    if (OperacionSeleccionada === "comprar") {
+      actualizarOpciones(SeleccionOrigen, comprar);
+      actualizarOpciones(SeleccionDestino, vender);
+    } else {
+      actualizarOpciones(SeleccionOrigen, vender);
+      actualizarOpciones(
+        SeleccionDestino,
+        OperacionSeleccionada === "vender" ? ["EUR"] : vender
+      );
+    }
+  };
+
+  actualizarMonedas();
+
+  // Actualiza los menús desplegables cada vez que se cambia la operación
+  SeleccionOperacion.addEventListener("change", actualizarMonedas);
+});
+
+
 
 // Función para obtener el precio de la moneda de origen y destino
 function PrecioUnitarioDestino() {

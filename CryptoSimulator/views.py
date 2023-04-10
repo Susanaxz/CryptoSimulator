@@ -1,6 +1,6 @@
 from . import app
 from flask import jsonify, request, render_template
-from config import DEFAULT_PAG, PAG_SIZE, COINS
+from config import DEFAULT_PAG, PAG_SIZE
 from .models import DBManager, Cripto, APIError
 from .forms import TransactionForm
 from datetime import datetime
@@ -17,8 +17,7 @@ def home():
 @app.route('/purchase')
 def form_nuevo():
     formulario = TransactionForm()
-    monedas = COINS
-    return render_template('purchase.html', form=formulario, coins=monedas)
+    return render_template('purchase.html', form=formulario)
 
 @app.route('/status')
 def status():

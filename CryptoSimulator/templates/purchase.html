@@ -28,6 +28,7 @@
 
         <label for="operacion">Operación:</label>
         <select id="operacion" name="operacion">
+            <option value="" selected="selected" disabled="disabled">-- Selecciona una operación --</option>
             <option value="comprar">Comprar</option>
             <option value="vender">Vender</option>
             <option value="intercambiar">Intercambiar</option>
@@ -39,9 +40,7 @@
             {{ form.from_currency.label }}
             <select id="from_currency" name="from_currency">
                 <option value="" selected="selected" disabled="disabled">-- Selecciona una moneda de origen --</option>
-                {% for coin in coins %}
-                <option value="{{ coin }}">{{ coin }}</option>
-                {% endfor %}
+                
             </select>
             {% if form.from_currency.errors %}
             {% for mensaje in form.from_currency.errors %}
@@ -67,9 +66,7 @@
     {{ form.to_currency.label }}
     <select id="to_currency" name="to_currency">
         <option value="" selected="selected" disabled="disabled">-- Selecciona una moneda de cambio --</option>
-        {% for coin in coins %}
-        <option value="{{ coin }}">{{ coin }}</option>
-        {% endfor %}
+        
     </select>
     {% if form.to_currency.errors %}
     {% for mensaje in form.to_currency.errors %}
