@@ -23,6 +23,10 @@ def form_nuevo():
 def status():
     return render_template('status.html')
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+
 
 
 @app.route('/api/v1/precios', methods=['GET'])
