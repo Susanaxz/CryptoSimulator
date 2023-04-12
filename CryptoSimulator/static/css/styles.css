@@ -288,10 +288,72 @@ form .precioBase input[type="text"] {
     text-overflow: var(--important-color);
 }
 
+/* fin estilos para el wallet */
+
+/* estilos para 404 */
+
 svg, .img404 {
     display: flex;
     margin: auto;
-    width: 50%;
-    height: 50%;
+    width: 42%;
+    height: 42%;
     padding: 0;
 }
+
+.seccion404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.texto_entrada {
+    font-size: 1.2rem;
+    margin-top:10px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.boton {
+    margin-top: 20px;
+    background: var(--bg-color);
+    color: #000000;
+    border: 2px solid var(--important-color);
+    padding: 10px 18px;
+    border-radius: 3px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.boton:hover {
+    color: #fff;
+}
+
+.boton::after {
+    content: "";
+    background: var(--important-color);
+    position: absolute;
+    z-index: -1;
+    padding: 10px 18px;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: -100%;
+    right: 100%;
+    -webkit-transition: all 0.35s;
+    transition: all 0.35s;
+}
+
+.boton:hover::after {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -webkit-transition: all 0.35s;
+    transition: all 0.35s;
+}
+
+/* fin estilos para 404 */
