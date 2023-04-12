@@ -21,7 +21,8 @@ header {
     padding-left: 35px;
 }
 
-img, .logo {
+img,
+.logo {
     height: 35px;
     width: 35px;
     margin: 0;
@@ -40,11 +41,15 @@ nav {
 
 }
 
+.nav-style {
+    margin-left: 3rem;
+}
+
 
 a {
     color: var(--primary-color);
     text-decoration: none;
-    margin-left: 3rem;
+
 }
 
 a:hover {
@@ -57,7 +62,8 @@ html {
 
 }
 
-h1, .titulo_entrada {
+h1,
+.titulo_entrada {
     font-size: 40px;
     text-align: center;
     font-weight: 800;
@@ -80,7 +86,7 @@ table {
     margin-top: 40px;
     border-collapse: collapse;
     font-size: 1.2rem;
-    
+
 }
 
 .titulo-tabla {
@@ -92,13 +98,14 @@ table {
     border-bottom: solid thin var(--primary-color);
     text-align: right;
 }
+
 th {
     padding: 10px;
     text-align: left;
     border-bottom: solid thin var(--primary-color);
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
-    
+
 }
 
 tr:last-child td {
@@ -109,6 +116,7 @@ tr:last-child td {
 tr:hover {
     background-color: #ddd;
 }
+
 tr.cabeceras:hover {
     background-color: transparent;
 }
@@ -130,9 +138,10 @@ td {
     padding: 8px;
 }
 
-.tabla-con-sombra, txt {
+.tabla-con-sombra,
+txt {
     text-align: center;
-    
+
 }
 
 /* fin de estilos de la tabla de la pagina de index */
@@ -180,7 +189,8 @@ td {
 
 /****** footer ******/
 
-footer, .pie_pagina {
+footer,
+.pie_pagina {
     background-color: var(--tertiary-color);
     font-size: 1rem;
     color: white;
@@ -188,7 +198,7 @@ footer, .pie_pagina {
     line-height: 50px;
     padding-left: 25px;
     text-align: center;
-    position:relative;
+    position: relative;
     bottom: 0;
     width: 100%;
 
@@ -220,13 +230,15 @@ form {
     display: flex;
     flex-direction: column;
 }
+
 form label {
     font-size: 1.2rem;
     margin-top: 20px;
     margin-bottom: 5px;
 }
 
-form select, form input {
+form select,
+form input {
     font-size: 16px;
     padding: 5px;
     width: 100%;
@@ -262,8 +274,8 @@ form .precioBase input[type="text"] {
     display: none;
     pointer-events: none;
 
-    
-    
+
+
 }
 
 /* fin de estilos para el formulario de compra */
@@ -271,13 +283,20 @@ form .precioBase input[type="text"] {
 /* estilos para el wallet */
 
 .wallet {
-    flex: 0 0 auto;
+    display: absolute;
     width: 250px;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
+}
+
+.seccion-wallet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
 }
 
 .cartera-txt {
@@ -292,7 +311,8 @@ form .precioBase input[type="text"] {
 
 /* estilos para 404 */
 
-svg, .img404 {
+svg,
+.img404 {
     display: flex;
     margin: auto;
     width: 42%;
@@ -310,13 +330,20 @@ svg, .img404 {
 
 .texto_entrada {
     font-size: 1.2rem;
-    margin-top:10px;
+    margin-top: 10px;
     margin-bottom: 5px;
     text-align: center;
 }
 
+.contenedor-botones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .boton {
     margin-top: 20px;
+    margin: 20px;
     background: var(--bg-color);
     color: #000000;
     border: 2px solid var(--important-color);
@@ -357,3 +384,39 @@ svg, .img404 {
 }
 
 /* fin estilos para 404 */
+
+.botones-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.seccion-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+status-th {
+    padding: 10px;
+    margin: 0;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.tabla-status {
+    width: 63%;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-collapse: collapse;
+    font-size: 1.2rem;
+    text-align: center;
+
+}
+
