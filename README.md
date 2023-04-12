@@ -28,7 +28,7 @@ Simulador de Inversiones en Cryptos es una aplicación web diseñada para ayudar
 
 ## Instalación y configuración
 
- 1. Clone el repositorio en su máquina local con git bash o desde su consola de su editor de código:
+ 1. Clona el repositorio en tu máquina local con git bash o desde tu consola de tu editor de código:
   
 ```bash
 git clone https://github.com/Susanaxz/CryptoSimulator.git
@@ -60,7 +60,7 @@ git clone https://github.com/Susanaxz/CryptoSimulator.git
     source ./env/bin/activate
     ```
  
-4. Instale las dependencias del proyecto:
+4. Instala las dependencias del proyecto:
     ```
     pip install -r requirements.txt
     ```
@@ -71,9 +71,9 @@ git clone https://github.com/Susanaxz/CryptoSimulator.git
     API_KEY = 'your_coinapi_key'
     DATABASE_URL = 'transactions.db'
     ```
-6. Editar el archivo .env y cambiar el valor de DEBUG (True/False). por motivos de seguridad dejar con el valor False
+6. Editar el archivo .env y cambiar el valor de DEBUG (True/False). Por motivos de seguridad dejar con el valor False
    
-7. Ejecute la aplicación:
+7. Ejecuta la aplicación:
     ```cmd
     c:\su_ruta\CryptoSimulator> flask run
     ```
@@ -85,7 +85,26 @@ git clone https://github.com/Susanaxz/CryptoSimulator.git
 
 ## Como utilizar
 
-Falta descripción!!
+Una vez hayas instalado y configurado la aplicación siguiendo las anteriores instrucciones, puede comenzar
+a utilizar el simulador de criptomonedas
+
+1. Simular operaciones de compra y venta
+
+Para simular una operación de compra/venta o intercambio de criptomonedas, selecciona la criptomoneda que deseas e ingresa la cantidad que deseas comprar/vender o intercambiar.
+Verás en tiempo real el precio de la crypto de destino que deseas adquirir operación.
+La aplicación calculará automáticamente el costo en función del precio actual de la criptomoneda seleccionada y de la cantidad que deseas invertir.
+
+2. Visualizar Operaciones   
+
+En la página principal, tendrás una tabla donde te muestra en todo momento todas las transacciones realizadas para poder llevar un control. 
+
+3. Status
+
+Dispones de una página de Status donde encontrarás un resumen de tu cartera de criptomonedas, incluyendo el rendimiento y la evolución de tus inversiones en tiempo real.
+
+4. Recuerda!!
+   
+CryptoSimulator es una herramienta educativa y no debe utilizarse para tomar decisiones de inversión en el mercado real.
 
 ## Contacto
 Si tienes preguntas, sugerencias o deseas contribuir al proyecto, no dudes en contactar:
