@@ -11,34 +11,47 @@
 <h1 class="titulo_entrada">Estado de la inversión</h1>
 <div class="container-status"></div>
 
-<section class="seccion-status">
+<section class="seccion-wallet">
 
     <div class="wallet">
         <h2 class="cartera-txt">Stock Cryptos</h2>
         <ul id="listado-cartera"></ul>
     </div>
 
+</section>
+
+<section class="seccion-status">
+
     <table class="tabla-status">
         <thead>
             <tr>
-                <th>Saldo de euros invertidos</th>
-                <th>Total invertido en EUR</th>
-                
-                <th>Valor actual de Cryptos en EUR</th>
+                <th class="">Saldo de euros invertidos</th>
+                <th class="">Total invertido en EUR</th>
+                <th class="status-th">Valor actual de Cryptos en EUR</th>
+
+
 
             </tr>
         </thead>
-        
-            <tr>
-                <td id="saldo_euros_invertidos"></td>
-                <td id="total_euros_invertidos"></td>
-                
-                <td id="valor_actual_cartera_euros"></td>
-            </tr>
-        
+
+        <tr>
+            <td id="saldo_euros_invertidos"></td>
+            <td id="total_euros_invertidos"></td>
+            <td id="valor_actual_cartera_euros"></td>
+        </tr>
+
     </table>
+    </section>
+
+    <section class="seccion-compra"></section>
+
+    <div class="botones-status">
+
+        <a href="/purchase" class="boton" >¿Deseas hacer alguna otra operación?</a>
+        
+    </div>
+
 
 </section>
-
 
 {% endblock contenido %}
