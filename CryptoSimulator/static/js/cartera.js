@@ -32,7 +32,7 @@ window.obtenerCartera = function() {
 function renderizarCartera(data) {
   console.log("data recibida en renderCartera", data);
   const listadoCartera = document.getElementById("listado-cartera");
-  listadoCartera.innerHTML = "";
+  listadoCartera.innerHTML = ""; 
 
   Object.entries(data).forEach(([moneda, total]) => { 
     console.log("Moneda individual:", moneda, total);
@@ -40,8 +40,8 @@ function renderizarCartera(data) {
 
     const listItem = document.createElement("li");
     
-    // listItem.innerHTML = `<strong>${moneda}</strong>: ${total.toFixed(4)}`;
-    listItem.innerHTML = `<strong>${moneda}</strong>: ${total}`;
+    listItem.innerHTML = `<strong>${moneda}</strong>: ${total.toFixed(6)}`;
+   
 
     listItem.setAttribute("data-moneda", moneda.to_currency);
     listItem.classList.add("moneda-item");
