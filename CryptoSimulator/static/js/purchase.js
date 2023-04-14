@@ -1,4 +1,5 @@
-controlarEvento();
+let spinner = document.querySelector("#sk-cube-grid");
+var overlay = document.querySelector(".overlay");
 
 const comprar = ["EUR"];
 const vender = [
@@ -14,6 +15,9 @@ const vender = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
+  const spinner = document.querySelector("#sk-cube-grid");
+  var overlay = document.querySelector(".overlay");
+  controlarEvento();
   const SeleccionOperacion = document.getElementById("operacion");
   const SeleccionOrigen = document.getElementById("from_currency");
   const SeleccionDestino = document.getElementById("to_currency");
@@ -28,6 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
       opcion.textContent = coin;
       seleccion.appendChild(opcion);
     }
+    setTimeout(() => {
+      spinner.classList.add("hidden");
+      overlay.classList.add("hidden");
+    }, 1000);
   };
  // Función para actualizar los menús desplegables de las monedas de origen y destino
   const actualizarMonedas = () => {
@@ -59,6 +67,9 @@ function PrecioUnitarioDestino() {
   var monedaDestino = document.getElementById("to_currency").value;
 
   if (monedaOrigen && monedaDestino) {
+    spinner.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+
     fetch(
       `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`,
       {
@@ -87,6 +98,10 @@ function PrecioUnitarioDestino() {
       })
       .catch((error) => {
         console.log("Error en la petición", error);
+      })
+      .finally(() => {
+        spinner.classList.add("hidden");
+        overlay.classList.add("hidden");
       });
   }
 }
@@ -111,6 +126,8 @@ function sendForm(event) {
   // Validar el formulario
     
   if (!validarFormulario(form)) {
+    spinner.classList.add("hidden");
+    overlay.classList.add("hidden");
     return;
   }
 
@@ -130,6 +147,8 @@ function sendForm(event) {
 
 
     } else if (operacion === "vender") {
+      spinner.classList.add("hidden");
+      overlay.classList.add("hidden");
 
       fetch(`http://127.0.0.1:5000/api/v1/cartera`, {
         method: "GET",
@@ -173,6 +192,10 @@ function sendForm(event) {
 
   function realizarCompra(jsonObject) {
     console.log("Realizando compra", jsonObject);
+
+    overlay.classList.add("hidden");
+    spinner.classList.add("hidden");
+
     fetch("http://127.0.0.1:5000/api/v1/comprar", {
       method: "POST",
       headers: {
@@ -201,7 +224,10 @@ function sendForm(event) {
       });
   }
 
-  function realizarIntercambio(jsonObject) {
+function realizarIntercambio(jsonObject) {
+  spinner.classList.add("hidden");
+  overlay.classList.add("hidden");
+    
     console.log("Realizando intercambio", jsonObject);
     const from_currency = jsonObject.from_currency;
     const from_quantity = jsonObject.from_quantity;
@@ -216,6 +242,7 @@ function sendForm(event) {
     })
       .then((response) => {
         if (response.status === 200) {
+          spinner.classList.add("hidden");
           return response.json();
         } else {
           throw new Error("Error en la petición de cartera");
@@ -240,6 +267,9 @@ function sendForm(event) {
         })
           .then((response) => {
             if (response.status === 200) {
+              spinner.classList.add("hidden");
+              overlay.classList.add("hidden");
+
               return response.json();
             } else {
               throw new Error("Error en la petición de intercambio");
@@ -248,6 +278,8 @@ function sendForm(event) {
           .then((data) => {
             console.log(data);
             const to_quantity = data.to_quantity;
+            spinner.classList.add("hidden");
+            overlay.classList.add("hidden");
             obtenerCartera();
             alert(`Has intercambiado ${from_quantity} ${from_currency} por ${to_quantity} ${to_currency}`);
           })
@@ -257,10 +289,14 @@ function sendForm(event) {
       })
       .catch((error) => {
         console.log("Error en la petición", error);
+        spinner.classList.add("hidden");
+        overlay.classList.add("hidden");
       });
   }
 
-  function realizarVenta(jsonObject, data) {
+function realizarVenta(jsonObject, data) {
+    spinner.classList.add("hidden");
+    overlay.classList.add("hidden");
     console.log("Realizando venta", jsonObject);
     const from_quantity = jsonObject.from_quantity;
     const to_currency = jsonObject.to_currency;
@@ -295,6 +331,8 @@ function sendForm(event) {
         // obtener el precio de la crypto
         const monedaOrigen = from_currency;
         const monedaDestino = "EUR";
+        spinner.classList.add("hidden");
+        overlay.classList.add("hidden");
 
         fetch(
           `http://127.0.0.1:5000/api/v1/precios?from_currency=${monedaOrigen}&to_currency=${monedaDestino}`,
@@ -314,6 +352,8 @@ function sendForm(event) {
           })
           .then((data) => {
             if (data.status === "success") {
+              spinner.classList.add("hidden");
+              overlay.classList.add("hidden");
               const rate = data.rate;
 
               const cantidad_venta = jsonObject.from_quantity;
@@ -362,6 +402,8 @@ function sendForm(event) {
       )
       .catch((error) => {
         console.log("Error en la petición", error);
+        spinner.classList.add("hidden");
+        overlay.classList.add("hidden");
       });
 }
   
@@ -397,9 +439,15 @@ function sendForm(event) {
     }
 
     if (!isValid) {
+      spinner.classList.add("hidden");
+      overlay.classList.add("hidden");
       alert(errorMsg);
     }
 
   return isValid;
 }
+
+
+
+
 

@@ -1,9 +1,11 @@
+let spinner;
+let overlay;
 const peticion = new XMLHttpRequest();
 console.log("Empiezo a ejecutar JS");
 
 function cargarTransacciones(page) {
   console.log("Has llamado a la función cargarTransacciones()");
-  // aquí irá el spinner
+  
 
   let queryParams = getQueryParams(page);
 
@@ -17,6 +19,9 @@ function cargarTransacciones(page) {
 
   peticion.open("GET", url);
   peticion.send();
+
+  spinner.classList.remove("hidden");
+  overlay.classList.remove("hidden");
 
 
 
@@ -138,6 +143,9 @@ function mostrarTransacciones() {
 
     const tabla = document.querySelector("#tabla-transacciones");
     tabla.innerHTML = html;
+    spinner.classList.add("hidden");
+    overlay.classList.add("hidden");
+    
 
     actualizarPaginacion(page, num_pages);
   } else if (this.status === 404) {
@@ -150,15 +158,21 @@ function mostrarTransacciones() {
         `;
     const txt = document.querySelector("#tabla-transacciones");
     txt.innerHTML = html;
+    spinner.classList.add("hidden");
+    overlay.classList.add("hidden");
   } else {
     console.log("La petición ha fallado");
     alert("Error al cargar las transacciones");
+    spinner.classList.add("hidden");
+    overlay.classList.add("hidden");
   }
 }
 
 window.onload = function () {
   console.log("funcion onload");
-  // aquí irá el spinner
+
+  spinner = document.querySelector("#sk-cube-grid");
+  overlay = document.querySelector("#overlay");
 
   cargarTransacciones();
   peticion.onload = mostrarTransacciones;
