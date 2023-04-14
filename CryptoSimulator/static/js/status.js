@@ -20,7 +20,7 @@ function obtenerStatus() {
         document.getElementById("total_euros_invertidos").textContent =
           results.total_euros_invertidos;
         document.getElementById("valor_actual_cartera_euros").textContent =
-          results.valor_actual_cartera_euros;
+          parseFloat(results.valor_actual_cartera_euros).toFixed(6);
       } else {
         if (data.status === "error") {
           console.log("Error al obtener el status de la cartera", data.message);
