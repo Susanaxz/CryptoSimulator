@@ -11,3 +11,5 @@ PAG_SIZE = 10
 
 # listado de monedas
 COINS = ['EUR', 'BTC', 'ETH', 'USDT', 'ADA', 'SOL', 'XRP', 'DOT', 'DOGE', 'SHIB']
+COMPRAR = ['EUR']
+VENDER = ['BTC', 'ETH', 'USDT', 'ADA', 'SOL', 'XRP', 'DOT', 'DOGE', 'SHIB']
