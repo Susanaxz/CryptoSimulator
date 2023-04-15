@@ -140,7 +140,16 @@ function sendForm(event) {
       jsonObject[key] = value;
     }
 
-    const operacion = jsonObject.operacion;
+  const operacion = jsonObject.operacion;
+  
+  const from_currency = jsonObject.from_currency;
+  const to_currency = jsonObject.to_currency;
+  
+    // comprobar que las monedas de origen y destino no sean iguales
+  if (operacion === "intercambiar" && from_currency === to_currency) {
+    alert("La moneda de origen y destino no pueden ser iguales.");
+    return;
+  }
 
     if (operacion === "comprar") {
       realizarCompra(jsonObject);
