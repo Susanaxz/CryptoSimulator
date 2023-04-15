@@ -117,8 +117,8 @@ function mostrarTransacciones() {
 
       // Ajustar los decimales
       const opciones = {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
+        minimumFractionDigits: 6,
+        maximumFractionDigits: 6,
       };
       const formateador = new Intl.NumberFormat("es-ES", opciones);
       const precioUd = formateador.format(trans.from_quantity / trans.to_quantity);
